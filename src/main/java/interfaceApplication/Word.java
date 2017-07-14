@@ -6,20 +6,19 @@ import org.bson.types.ObjectId;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import JGrapeSystem.jGrapeFW_Message;
+import apps.appsProxy;
 import authority.privilige;
 import database.db;
-import esayhelper.JSONHelper;
-import esayhelper.TimeHelper;
-import esayhelper.jGrapeFW_Message;
+import json.JSONHelper;
 import model.WordModel;
 import nlogger.nlogger;
 import rpc.execRequest;
+import time.TimeHelper;
 
 public class Word {
 	private static JSONObject _obj;
 	private static WordModel model;
-	// private static JSONObject UserInfo = null;
-	// private static session session;
 	private static HashMap<String, Object> map;
 
 	static {
@@ -182,7 +181,7 @@ public class Word {
 		if (sid != null) {
 			try {
 				privilige privil = new privilige(sid);
-				int roleplv = privil.getRolePV();
+				int roleplv = privil.getRolePV(appsProxy.appidString());
 				if (roleplv >= 1000 && roleplv < 3000) {
 					roleSign = 1; // 普通用户即企业员工
 				}
@@ -241,7 +240,7 @@ public class Word {
 		map.put("content", "");
 		map.put("count", 1);
 		map.put("state", 1); // 待审核热词
-		map.put("time", TimeHelper.nowSecond());
+		map.put("time", TimeHelper.nowMillis());
 		return map;
 	}
 
