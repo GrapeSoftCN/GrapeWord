@@ -17,11 +17,11 @@ import rpc.execRequest;
 import time.TimeHelper;
 
 public class Word {
-	private static JSONObject _obj;
-	private static WordModel model;
-	private static HashMap<String, Object> map;
+	private JSONObject _obj;
+	private WordModel model;
+	private HashMap<String, Object> map;
 
-	static {
+	public Word() {
 		map = new HashMap<String, Object>();
 		_obj = new JSONObject();
 		model = new WordModel();
@@ -66,6 +66,20 @@ public class Word {
 		return resultMessage(code, "热词新增成功");
 	}
 
+	// 批量新增热词
+	public String AddWords(String infos) {
+		String result = resultMessage(99);
+		String info;
+		JSONArray array = JSONArray.toJSONArray(infos);
+		if (array != null && array.size() != 0) {
+			for (int i = 0; i < array.size(); i++) {
+				info = array.get(i).toString();
+				result = AddWord(info);
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * 按搜索次数显示热词
 	 * 
@@ -84,7 +98,7 @@ public class Word {
 		JSONArray cond = JSONHelper.string2array(conds);
 		db _db = model.getdb();
 		_db = (cond == null) ? _db : _db.where(cond);
-		JSONArray array = _db.desc("time").desc("count").limit(no).select();
+		JSONArray array = _db.desc("time").desc("count").limit(20).select();
 		return resultMessage(array);
 	}
 
@@ -163,7 +177,6 @@ public class Word {
 		}
 		return resultMessage(array);
 	}
-
 
 	/**
 	 * 根据角色plv，获取角色级别

@@ -17,19 +17,14 @@ import nlogger.nlogger;
 import rpc.execRequest;
 
 public class WordModel {
-	private static userDBHelper Word;
-	private static formHelper form;
-	private static String sid = null;
-
-	static {
-		sid = (String) execRequest.getChannelValue("sid");
-		nlogger.logout(sid);
-		Word = new userDBHelper("Words", sid);
-		nlogger.logout((String) execRequest.getChannelValue("sid"));
-		form = Word.getChecker();
-	}
+	private userDBHelper Word;
+	private formHelper form;
+	private String sid = null;
 
 	public WordModel() {
+		sid = (String) execRequest.getChannelValue("sid");
+		Word = new userDBHelper("Words", sid);
+		form = Word.getChecker();
 		form.putRule("content", formdef.notNull);
 	}
 
